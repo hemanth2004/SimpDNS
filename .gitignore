@@ -1,0 +1,12 @@
+*.sqlite
+*.db
+
+[Bb]in/
+[Oo]bj/
+
+piped_output.txt
+
+.vs/
+.vscode/
+
+

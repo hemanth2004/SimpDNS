@@ -1,0 +1,142 @@
+# SimpDNS Server Config
+## .TOML format spec: https://toml.io/en/v1.0.0
+
+[service]
+port = 8000
+allow_tcp = false
+
+# verbose logging on the terminal
+# valid values are 0, 1, 2 and 3
+verbosity = 3
+
+
+
+
+[service.db]
+# path to the actual database file
+# if it doesn't exist, it will be created
+db_file = "./cache/cache.sqlite"
+
+# path to the database setup SQL file
+db_setup = "./cache/setup.sql"
+
+
+
+
+[simp_dns]
+# days that a cached authoritative NS will be used
+cached_ns_ttl = 7 
+
+# fallback minimum TTL for negative cache
+fallback_minimum_ttl = 300
+
+
+# root ns hints
+[[simp_dns.root_ns]]
+domain = "a.root-servers.net."
+1 = "198.41.0.4"
+28 = "2001:503:ba3e::2:30"
+
+[[simp_dns.root_ns]]
+domain = "b.root-servers.net."
+1 = "170.247.170.2"
+28 = "2801:1b8:10::b"
+
+[[simp_dns.root_ns]]
+domain = "c.root-servers.net."
+1 = "192.33.4.12"
+28 = "2001:500:2::c"
+
+[[simp_dns.root_ns]]
+domain = "d.root-servers.net."
+1 = "199.7.91.13"
+28 = "2001:500:2d::d"
+
+[[simp_dns.root_ns]]    
+domain = "e.root-servers.net."
+1 = "192.203.230.10"
+28 = "2001:500:a8::e"
+
+[[simp_dns.root_ns]]
+domain = "f.root-servers.net."
+1 = "192.5.5.241"
+28 = "2001:500:2f::f"
+
+[[simp_dns.root_ns]]
+domain = "g.root-servers.net."
+1 = "192.112.36.4"
+28 = "2001:500:12::d0d"
+
+[[simp_dns.root_ns]]
+domain = "h.root-servers.net."
+1 = "198.97.190.53"
+28 = "2001:500:1::53"
+
+[[simp_dns.root_ns]]
+domain = "i.root-servers.net."
+1 = "192.36.148.17"
+28 = "2001:7fe::53"
+
+[[simp_dns.root_ns]]
+domain = "j.root-servers.net."
+1 = "192.58.128.30"
+28 = "2001:503:c27::2:30"
+
+[[simp_dns.root_ns]]
+domain = "k.root-servers.net."
+1 = "193.0.14.129"
+28 = "2001:7fd::1"
+
+[[simp_dns.root_ns]]
+domain = "l.root-servers.net."
+1 = "199.7.83.42"
+28 = "2001:500:9f::42"
+
+[[simp_dns.root_ns]]
+domain = "m.root-servers.net."
+1 = "202.12.27.33"
+28 = "2001:dc3::35"
+
+
+
+
+# ============================================= #
+#                 LOCAL RESOLUTION              #
+# Add your local resolution rules under here    #
+# with the format of:                           #
+#                                               #
+# [[simp_dns.local_resolution]]                 #
+# domain = <domain>                             #
+# 1 = <ipv4_address>                            #
+# 28 = <ipv6_address>                           #
+#                                               #
+# Note: <domain> can also be a wildcard domain. #
+#       Don't need both IPv4 and IPv6 addresses #
+#       for local resolution to work.           #
+# ============================================= #
+
+[[simp_dns.local_resolution]]
+domain = "localhost"
+1 = "127.0.0.1"
+28 = "::1"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

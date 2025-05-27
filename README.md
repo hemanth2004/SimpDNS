@@ -6,7 +6,6 @@ A recursive DNS server using .NET
 - Supports UDP and TCP for A & AAAA queries and status requests
 - SQLite for caching and negative caching, with replacement based on TTL
 - Supports local resolution with wildcard domains
-- Verbose logging (3 levels)
 
 
 ## Usage

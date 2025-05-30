@@ -3,7 +3,7 @@
 A recursive DNS server using .NET
 
 - Implements RFC1034, RFC1035 and a few later RFCs for modern DNS and for IPv6
-- Supports UDP and TCP for A & AAAA queries and status requests
+- Supports UDP and TCP for A & AAAA query and status request
 - SQLite for caching and negative caching, with replacement based on TTL
 - Supports local resolution with wildcard domains
 
@@ -28,6 +28,7 @@ dig @localhost -p <port> <domain> <type>
 ## Config File
 
 The server and DNS properties are in a TOML file => `config.toml`.
+(See [TOML format spec](https://toml.io/en/v1.0.0))
 
 1. Port, TCP availability, verbosity & other DNS properties
     - `port` - The port to listen on

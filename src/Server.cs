@@ -79,7 +79,8 @@ namespace HMNT.SimpDNS
             {
                 try
                 {
-                    var tcpClient = tcpListener.AcceptTcpClient();   // Blocking accept
+                    // Listening and accept a new request connection
+                    var tcpClient = tcpListener.AcceptTcpClient();
                     var stream = tcpClient.GetStream();
 
                     // Read 2-byte length prefix
@@ -87,17 +88,17 @@ namespace HMNT.SimpDNS
                     stream.Read(lenBuf, 0, 2);
                     int length = (lenBuf[0] << 8) | lenBuf[1];
 
-                    // Read the DNS query
                     var req = new byte[length];
                     int read = 0;
                     while (read < length)
                         read += stream.Read(req, read, length - read);
 
-                    // Process and reply
+                    // Handle the request and get the response
+                    // TODO: dnsHandler.Handle() should be a Task
                     var remoteEP = (IPEndPoint)tcpClient.Client.RemoteEndPoint;
                     var resp = dnsHandler.Handle(req, remoteEP);
 
-                    // Write length + data
+                    // Write length followed by data
                     var respLen = new byte[] { (byte)(resp.Length >> 8), (byte)(resp.Length & 0xFF) };
                     stream.Write(respLen, 0, 2);
                     stream.Write(resp, 0, resp.Length);

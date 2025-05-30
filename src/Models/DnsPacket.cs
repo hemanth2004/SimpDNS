@@ -115,52 +115,15 @@ namespace HMNT.SimpDNS
                         return ms.ToArray();
                     }
 
-                case Dns.TypeMX:
-                    // MX records have a 16-bit preference value followed by a domain name
-                    using (var ms = new MemoryStream())
-                    using (var writer = new BinaryWriter(ms))
-                    {
-                        // Use the Utils method and parse preference separately
-                        var (preference, domainName) = ParseMXFromRData(RData);
-                        writer.Write(Utils.HostToNetworkOrder(preference));
-                        WriteDomainName(writer, domainName);
-                        return ms.ToArray();
-                    }
 
+                // Too complex to handle here
+                case Dns.TypeMX:
                 case Dns.TypeSOA:
-                    // SOA records are more complex - for now, return the stored RData
-                    // You may need to implement proper SOA handling later
                     return RData;
 
                 default:
                     // For A, AAAA, and other simple record types, return as-is
                     return RData;
-            }
-        }
-
-        private static (ushort preference, string domainName) ParseMXFromRData(byte[] rdata)
-        {
-            using (var ms = new MemoryStream(rdata))
-            using (var reader = new BinaryReader(ms))
-            {
-                ushort preference = Utils.NetworkToHostOrder(reader.ReadUInt16());
-                
-                var labels = new List<string>();
-                while (ms.Position < ms.Length)
-                {
-                    byte length = reader.ReadByte();
-                    if (length == 0) break;
-                    
-                    if (length > 63)
-                    {
-                        throw new InvalidOperationException("Compression pointers not supported in this context");
-                    }
-                    
-                    byte[] labelBytes = reader.ReadBytes(length);
-                    labels.Add(Encoding.ASCII.GetString(labelBytes));
-                }
-                
-                return (preference, string.Join(".", labels));
             }
         }
 
@@ -339,20 +302,6 @@ namespace HMNT.SimpDNS
                     }
                     break;
 
-                case Dns.TypeMX:
-                    // MX records have a 16-bit preference value followed by a domain name
-                    reader.BaseStream.Position = startPosition;
-                    using (var ms = new MemoryStream())  // Create expandable MemoryStream
-                    using (var writer = new BinaryWriter(ms))
-                    {
-                        ushort preference = Utils.NetworkToHostOrder(reader.ReadUInt16());
-                        string domainName = Utils.ReadDomainName(reader, fullPacket);
-                        
-                        writer.Write(Utils.HostToNetworkOrder(preference));
-                        WriteDomainName(writer, domainName);
-                        record.RData = ms.ToArray();  // Get the final byte array
-                    }
-                    break;
 
                 case Dns.TypeSOA:
                     // SOA records have complex structure with multiple fields
